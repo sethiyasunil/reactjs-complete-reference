@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import Aux from '../../hoc/Auxilery'
+import Aux from '../../hoc/Auxilery/Auxilery'
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Model from '../../components/UI/Modal/Modal'
@@ -19,7 +19,7 @@ class BurgerBuilder extends  Component{
 
     purchasableHandler = ()=>{
          let totalIngredients = Object.keys(this.state.ingredients).map(k=>this.state.ingredients[k]).reduce((ov,nv)=>ov+nv,0)
-        this.setState({purchasable:totalIngredients>0},()=>{console.log(this.state.purchasable)})
+        this.setState({purchasable:totalIngredients>0})
 
   }
 
