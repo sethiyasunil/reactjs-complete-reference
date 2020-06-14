@@ -14,8 +14,6 @@ class OrderSummary extends Component {
                     </li> );
             } );
 
-        console.log('OrderSummary re-rendered')
-
         return (
             <Aux>
                 <h3>Your Order</h3>

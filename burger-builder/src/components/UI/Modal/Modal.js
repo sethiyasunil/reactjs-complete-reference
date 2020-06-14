@@ -2,12 +2,14 @@ import React,{Component} from "react";
 import Aux from '../../../hoc/Auxilery/Auxilery'
 import classes from './Modal.module.css';
 import Backdrop from '../Backdrop/Backdrop'
+import PropTyes from 'prop-types'
 
 
 class Modal extends Component{
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-            return nextProps.show !== this.props.show
+            return nextProps.show !== this.props.show ||
+                nextProps.children !== this.props.children
     }
 
     render(){
@@ -24,7 +26,11 @@ class Modal extends Component{
             </Aux>
         )
     }
+}
 
+Modal.propTypes = {
+    show:PropTyes.bool.isRequired,
+    modelClosed:PropTyes.func.isRequired
 }
 
 export default Modal;
