@@ -11,12 +11,16 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 const INGREDIENT_PRICES = {salad:0.5, bacon:0.7 , cheese:0.4, meat:1.3}
 class BurgerBuilder extends  Component{
 
+    constructor(props) {
+        super(props);
+    }
+
      state = {
                 ingredients: null,
                 totalPrice: 4.0,
                 purchasable:false,
                 purchasing: false,
-         loading:false
+                loading:false
 
 
 }
@@ -62,24 +66,17 @@ class BurgerBuilder extends  Component{
     }
 
 
-    purchaseContinueHandler = () => {
-        this.setState({loading:true})
-        let order = {
-                        ingredients:this.state.ingredients,
-                        price: this.state.totalPrice,
-                        customer: {name:'Sunil', address:'Gurgaon', zipCode:'442424', email:'test@test.com',deliveryMethod:'fastest'}
-                     }
-         axios.post('/orders.json',order)
-             .then(response=>{
-                 console.log(response)
-                 this.setState({loading:false, purchasing:false})
-                 return response;
-             })
-             .catch(error=>{
-                 console.log('error received')
-                 this.setState({loading:false,purchasing:false})
-                 return Promise.reject(error)
-             })
+    purchaseContinuedHandler = () => {
+        let queryParams = []
+        for(let key in this.state.ingredients){
+            queryParams.push(encodeURIComponent(key)+ '='+ encodeURIComponent(this.state.ingredients[key]))
+        }
+        queryParams.push(encodeURIComponent('price')+'='+encodeURIComponent(this.state.totalPrice))
+        let queryString = queryParams.join('&')
+        this.props.history.push({
+            pathname: "/checkout",
+            search: queryString
+        })
     }
 
     componentDidMount() {
@@ -101,7 +98,7 @@ class BurgerBuilder extends  Component{
                  ingredients={this.state.ingredients}
                  totalPrice = {this.state.totalPrice}
                  purchaseCancelled={this.purchaseCancelHandler}
-                 purchaseContinued={this.purchaseContinueHandler}/>
+                 purchaseContinued={this.purchaseContinuedHandler}/>
          }
          if(this.state.loading){
              orderSummary=<Spinner/>

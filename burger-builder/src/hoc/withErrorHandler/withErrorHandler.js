@@ -13,13 +13,16 @@ const withErrorHandler = (EmbeddedComponent, axios) => {
 
             componentDidMount() {
                 this.requestInterceptor = axios.interceptors.request.use(request=>{
+                    console.log('withErrorHandler request' , request)
                     this.setState({error:null})
                     return request
                 })
                 this.responseInterceptor = axios.interceptors.response.use(response=>{
+                    console.log('withErrorHandler response' , response)
                     this.setState({error:null})
                     return response
                 },error => {
+                    console.log('withErrorHandler error' , error)
                     this.setState({error:error})
                     return Promise.reject(error)
                 })
@@ -42,7 +45,7 @@ const withErrorHandler = (EmbeddedComponent, axios) => {
                             <Modal show={this.state.error!=null} modelClosed={this.errorConfirmedHandler}>
                                     <p>{this.state.error?this.state.error.message:null}</p>
                             </Modal>
-                            <EmbeddedComponent props={this.props}/>
+                            <EmbeddedComponent {...this.props}/>
                         </Aux>
                     )
                 }
