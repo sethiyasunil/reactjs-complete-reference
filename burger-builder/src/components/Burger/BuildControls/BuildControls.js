@@ -1,33 +1,31 @@
-import React from "react";
-import BuildControl from './BuildControl/BuildControl'
-import classes from './BuildControls.module.css'
+import React from 'react';
 
-const controls=[
-    {label:'Salad', type:'salad'},
-    {label:'Cheese', type:'cheese'},
-    {label:'Meat', type:'meat'},
-    {label:'Bacon', type:'bacon'},
-]
+import classes from './BuildControls.module.css';
+import BuildControl from './BuildControl/BuildControl';
 
-const buildControls = (props)=>(
+const controls = [
+    { label: 'Salad', type: 'salad' },
+    { label: 'Bacon', type: 'bacon' },
+    { label: 'Cheese', type: 'cheese' },
+    { label: 'Meat', type: 'meat' },
+];
 
-
-        <div className={classes.BuildControls}>
+const buildControls = (props) => (
+    <div className={classes.BuildControls}>
         <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p>
-            {controls.map(bldCtrl=>{
-                    return <BuildControl
-                            type={bldCtrl.type}
-                            label={bldCtrl.label}
-                            key={bldCtrl.label}
-                            added={()=>props.ingredientAdded(bldCtrl.type)}
-                            removed={()=>props.ingredientRemoved(bldCtrl.type)}
-                            disabled = {props.disabledInfo[bldCtrl.type]}
-                    />
-            })}
-            <button className={classes.OrderButton} disabled={!props.purchasable} onClick={props.ordered}>Order Now</button>
-        </div>
-
-
-)
+        {controls.map(ctrl => (
+            <BuildControl 
+                key={ctrl.label} 
+                label={ctrl.label}
+                added={() => props.ingredientAdded(ctrl.type)}
+                removed={() => props.ingredientRemoved(ctrl.type)}
+                disabled={props.disabled[ctrl.type]} />
+        ))}
+        <button 
+            className={classes.OrderButton}
+            disabled={!props.purchasable}
+            onClick={props.ordered}>ORDER NOW</button>
+    </div>
+);
 
 export default buildControls;

@@ -1,55 +1,44 @@
-import React, {Component} from 'react';
-import classes from './Orders.module.css'
-import Order from '../../components/Order/Order'
-import axios from '../../axios-orders'
-import Spinner from '../../components/UI/Spinner/Spinner'
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import React, { Component } from 'react';
+
+import Order from '../../components/Order/Order';
+import axios from '../../axios-orders';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 class Orders extends Component {
-
     state = {
-        orders:[],
-        loading: false
+        orders: [],
+        loading: true
     }
 
     componentDidMount() {
-        this.setState({loading:true})
-        let fetchedOrders = []
         axios.get('/orders.json')
-            .then((response)=>{
-                for(let key in response.data){
+            .then(res => {
+                const fetchedOrders = [];
+                for (let key in res.data) {
                     fetchedOrders.push({
-                        ...response.data[key],
+                        ...res.data[key],
                         id: key
-                    })
+                    });
                 }
-                this.setState({loading:false, orders: fetchedOrders})
+                this.setState({loading: false, orders: fetchedOrders});
             })
-            .catch((error)=>{
-                console.log(error)
-                this.setState({loading:false})
+            .catch(err => {
+                this.setState({loading: false});
             });
-
-
     }
 
-    render() {
-
-        let orders = this.state.orders.map(
-            (order) =>  <Order ingredients={order.ingredients} price={order.price} key={order.id}/>);
-        if(this.state.loading){
-            orders= <Spinner/>
-        }
-
-
+    render () {
         return (
             <div>
-                {orders}
+                {this.state.orders.map(order => (
+                    <Order 
+                        key={order.id}
+                        ingredients={order.ingredients}
+                        price={order.price} />
+                ))}
             </div>
-        )
-
-        }
-
-
+        );
     }
-    export default withErrorHandler(Orders,axios)
+}
+
+export default withErrorHandler(Orders, axios);
