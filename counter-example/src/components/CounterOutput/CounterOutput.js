@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './CounterOutput.css';
+import './CounterOutput.module.css';
 
 const counterOutput = (props) => (
     <div className="CounterOutput">

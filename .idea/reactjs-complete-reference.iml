@@ -4,6 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/axios-example" />
+      <excludeFolder url="file://$MODULE_DIR$/blog-posts" />
+      <excludeFolder url="file://$MODULE_DIR$/burger-builder" />
       <excludeFolder url="file://$MODULE_DIR$/my-app" />
       <excludeFolder url="file://$MODULE_DIR$/react-template" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
