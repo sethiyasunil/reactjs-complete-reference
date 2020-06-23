@@ -1,31 +1,19 @@
-import * as ActionTypes from '../actions'
-const initialSate = {
-    counter:0,
-    results:[]
+import * as ActionTypes from '../actions/actionTypes'
+import {updateObject} from '../utility'
+const initialState = {
+    counter:0
 }
-const reducer = (state = initialSate,action)=>{
-    console.log('reducer called ' , state, action);
+const reducer = (state = initialState,action)=>{
+    console.log('counter reducer called ' , state, action);
     switch(action.type){
         case ActionTypes.INCREMENT:
-            return {
-                ...state,
-                counter: state.counter+1
-            }
+            return updateObject(state,{counter: state.counter+1})
         case ActionTypes.DECREMENT:
-            return {
-                ...state,
-                counter: state.counter-1
-            }
+            return updateObject(state,{counter: state.counter-1})
         case ActionTypes.ADD:
-            return {
-                ...state,
-                counter: state.counter+ action.value
-            }
+            return updateObject(state,{counter: state.counter+ action.value})
         case ActionTypes.SUBTRACT:
-            return {
-                ...state,
-                counter: state.counter-action.value
-            }
+            return updateObject(state,{counter: state.counter-action.value})
     }
     return state;
 }
