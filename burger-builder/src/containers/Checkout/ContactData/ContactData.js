@@ -6,6 +6,8 @@ import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 import Input from '../../../components/UI/Input/Input';
 import {connect} from "react-redux";
+import * as orderActions from '../../../store/actions/index'
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 class ContactData extends Component {
     state = {
@@ -85,7 +87,7 @@ class ContactData extends Component {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
                 },
-                value: '',
+                value: 'fastest',
                 valid: true
             }
         },
@@ -95,7 +97,6 @@ class ContactData extends Component {
 
     orderHandler = ( event ) => {
         event.preventDefault();
-        this.setState( { loading: true } );
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
@@ -105,14 +106,9 @@ class ContactData extends Component {
             price: this.props.price,
             orderData: formData
         }
-        axios.post( '/orders.json', order )
-            .then( response => {
-                this.setState( { loading: false } );
-                this.props.history.push( '/' );
-            } )
-            .catch( error => {
-                this.setState( { loading: false } );
-            } );
+
+        this.props.onOrderBurger(order);
+
     }
 
     checkValidity(value, rules) {
@@ -176,7 +172,7 @@ class ContactData extends Component {
                 <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
         );
-        if ( this.state.loading ) {
+        if ( this.props.loading ) {
             form = <Spinner />;
         }
         return (
@@ -192,15 +188,17 @@ class ContactData extends Component {
 
 const mapStateToProps = (state)=>{
     return {
-        ingredients: state.ingredients,
-        price: state.totalPrice
+        ingredients: state.bgr.ingredients,
+        price: state.bgr.totalPrice,
+        loading: state.odr.loading
     }
 }
 
 const mapDispatchToProps =(dispatch)=> {
     return {
+        onOrderBurger: (order)=>dispatch(orderActions.purchaseBurger(order))
     }
 
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(ContactData);
+export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(ContactData, axios));
