@@ -1,4 +1,6 @@
 import * as ActionTypes from '../actions/actionTypes';
+import * as utility from '../utility'
+import {fetchIngredientsFailed} from "../actions/burgerBuilder";
 
 const BURGER_INITIAL_PRICE = 4
 
@@ -16,52 +18,54 @@ const INGREDIENT_PRICES = {
 };
 
 
+const addIngredient = (state,action)=>{
+    let updatedIngredients = utility.updateObject(
+        state.ingredients,
+        {[action.ingredientName]: state.ingredients[action.ingredientName]+1}
+    )
+
+    return utility.updateObject(state,{
+        ingredients: updatedIngredients,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+    })
+}
+
+const removeIngredient = (state,action)=>{
+    let updatedIngredients = utility.updateObject(
+        state.ingredients,
+        {[action.ingredientName]: state.ingredients[action.ingredientName]-1}
+    )
+
+    return utility.updateObject(state,{
+        ingredients: updatedIngredients,
+        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
+    })
+}
+
+
+const setIngredient = (state,action)=>{
+    return utility.updateObject(state, {
+        ingredients: action.ingredients,
+        error: false,
+        totalPrice: BURGER_INITIAL_PRICE
+    })
+}
+
+const setIngredientFailed = (state,action)=>{
+    return utility.updateObject(state, {
+        ...state,
+        error: true
+    });
+}
+
 const reducer = (state = initialState,action)=>{
-    let updatedState=null;
     switch(action.type){
-        case ActionTypes.ADD_INGREDIENT:
-            updatedState =  {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName]+1
-                },
-                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
-            }
-            break;
-        case ActionTypes.REMOVE_INGREDIENT:
-            updatedState = {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName]-1
-                },
-                totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
-
-            }
-            break;
-        case ActionTypes.SET_INGREDIENTS:
-            updatedState = {
-                ...state,
-                ingredients: action.ingredients,
-                error: false,
-                totalPrice: BURGER_INITIAL_PRICE
-            }
-            break;
-        case ActionTypes.FETCH_INGREDIENTS_FAILED:
-            updatedState = {
-                ...state,
-                error: true
-            }
-            break;
-        default:
-            console.log('invalid action type '+ action.type)
-            updatedState= state;
-            break;
+        case ActionTypes.ADD_INGREDIENT: return addIngredient(state,action);
+        case ActionTypes.REMOVE_INGREDIENT: return removeIngredient(state,action);
+        case ActionTypes.SET_INGREDIENTS:  return setIngredient(state, action)
+        case ActionTypes.FETCH_INGREDIENTS_FAILED: return fetchIngredientsFailed(state,action)
+        default: return state;
     }
-    return updatedState;
-
-
 }
 
 export default reducer
