@@ -7,7 +7,8 @@ const BURGER_INITIAL_PRICE = 4
 const initialState = {
     ingredients: null,
     totalPrice: BURGER_INITIAL_PRICE,
-    error:false
+    error:false,
+    building:false,
 }
 
 const INGREDIENT_PRICES = {
@@ -26,7 +27,8 @@ const addIngredient = (state,action)=>{
 
     return utility.updateObject(state,{
         ingredients: updatedIngredients,
-        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+        building:true
     })
 }
 
@@ -38,7 +40,8 @@ const removeIngredient = (state,action)=>{
 
     return utility.updateObject(state,{
         ingredients: updatedIngredients,
-        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
+        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+        building:true
     })
 }
 
@@ -47,7 +50,8 @@ const setIngredient = (state,action)=>{
     return utility.updateObject(state, {
         ingredients: action.ingredients,
         error: false,
-        totalPrice: BURGER_INITIAL_PRICE
+        totalPrice: BURGER_INITIAL_PRICE,
+        building:false
     })
 }
 

@@ -10,3 +10,8 @@ export {
         fetchOrders,
 
 } from './order'
+export {
+        auth,
+        setAuthRedirectPath,
+        authCheckState
+} from './auth'

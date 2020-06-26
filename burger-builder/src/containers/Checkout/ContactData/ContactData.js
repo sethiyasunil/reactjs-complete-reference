@@ -8,6 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 import {connect} from "react-redux";
 import * as orderActions from '../../../store/actions/index'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as validator from '../../../components/UI/Input/validationUtility'
 
 class ContactData extends Component {
     state = {
@@ -104,30 +105,15 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            orderData: formData
+            orderData: formData,
+            userId : this.props.userId
         }
 
-        this.props.onOrderBurger(order);
+        this.props.onOrderBurger(order, this.props.idToken);
 
     }
 
-    checkValidity(value, rules) {
-        let isValid = true;
-        
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
 
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid
-        }
-
-        return isValid;
-    }
 
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {
@@ -137,7 +123,7 @@ class ContactData extends Component {
             ...updatedOrderForm[inputIdentifier]
         };
         updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.valid = validator.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
         
@@ -190,13 +176,15 @@ const mapStateToProps = (state)=>{
     return {
         ingredients: state.bgr.ingredients,
         price: state.bgr.totalPrice,
-        loading: state.odr.loading
+        loading: state.odr.loading,
+        idToken: state.auth.idToken,
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps =(dispatch)=> {
     return {
-        onOrderBurger: (order)=>dispatch(orderActions.purchaseBurger(order))
+        onOrderBurger: (order,idToken)=>dispatch(orderActions.purchaseBurger(order, idToken))
     }
 
 }

@@ -16,7 +16,7 @@ import * as actions from '../../store/actions/index'
 class BurgerBuilder extends Component {
 
     state = {
-        purchasing: false
+        purchasing: false,
     }
 
     componentDidMount () {
@@ -35,8 +35,13 @@ class BurgerBuilder extends Component {
     }
 
     purchaseHandler = () => {
-        this.props.onInitPurchase()
-        this.setState( { purchasing: true } );
+        if(this.props.isAuthenticated){
+            this.props.onInitPurchase()
+            this.setState( { purchasing: true } );
+        }else{
+            this.props.onSetAuthRedirectPath("/checkout")
+            this.props.history.push('/auth')
+        }
     }
 
     purchaseCancelHandler = () => {
@@ -63,7 +68,8 @@ class BurgerBuilder extends Component {
                         disabled={disabledInfo}
                         purchasable={this.updatePurchaseState(this.props.ingredients)}
                         ordered={this.purchaseHandler}
-                        price={this.props.totalPrice} />
+                        price={this.props.totalPrice}
+                        isAuthenticated={this.props.isAuthenticated}/>
                 </Aux>
             );
             orderSummary = <OrderSummary
@@ -88,7 +94,8 @@ const mapStateToProps = (state)=>{
     return {
         ingredients: state.bgr.ingredients,
         totalPrice: state.bgr.totalPrice,
-        error: state.bgr.error
+        error: state.bgr.error,
+        isAuthenticated: state.auth.idToken!=null
     }
 }
 
@@ -97,7 +104,8 @@ const mapDispatchToProps =(dispatch)=> {
         onIngredientAdded: (ingredientName) => dispatch(actions.addIngredient(ingredientName)),
         onIngredientRemoved: (ingredientName) => dispatch(actions.removeIngredient(ingredientName)),
         onInitIngredients: ()=> dispatch(actions.initIngredients()),
-        onInitPurchase : ()=> dispatch(actions.purchaseInit())
+        onInitPurchase : ()=> dispatch(actions.purchaseInit()),
+        onSetAuthRedirectPath: (path)=> dispatch(actions.setAuthRedirectPath(path))
     }
 
 }
