@@ -8,7 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 import {connect} from "react-redux";
 import * as orderActions from '../../../store/actions/index'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import * as validator from '../../../components/UI/Input/validationUtility'
+import * as utility from '../../../shared/utility'
 
 class ContactData extends Component {
     state = {
@@ -116,14 +116,17 @@ class ContactData extends Component {
 
 
     inputChangedHandler = (event, inputIdentifier) => {
+
+        utility.updateObject()
+
         const updatedOrderForm = {
             ...this.state.orderForm
         };
-        const updatedFormElement = { 
+        const updatedFormElement = {
             ...updatedOrderForm[inputIdentifier]
         };
         updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = validator.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.valid = utility.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
         

@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions/actionTypes';
-import * as utility from '../utility'
+import * as utility from '../../shared/utility'
 import {fetchIngredientsFailed} from "../actions/burgerBuilder";
 
 const BURGER_INITIAL_PRICE = 4

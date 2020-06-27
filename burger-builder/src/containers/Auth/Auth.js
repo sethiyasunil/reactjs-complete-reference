@@ -2,12 +2,12 @@ import React,{Component} from 'react'
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import classes from "./Auth.module.css";
-import * as validator from '../../components/UI/Input/validationUtility'
 import * as authActions from '../../store/actions/index'
 import {connect} from "react-redux";
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import axios from "../../axios-orders";
+import * as utility from './../../shared/utility'
 import {Redirect} from 'react-router-dom'
 
 class Auth extends Component{
@@ -66,7 +66,7 @@ class Auth extends Component{
             ...updatedOrderForm[inputIdentifier]
         };
         updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = validator.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.valid = utility.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
 
